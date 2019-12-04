@@ -1,33 +1,53 @@
 import RPi.GPIO as GPIO
 import time
 
-
-
 # FND Pin Dig position pin
 # FND Left Top Dig : 1
 # FND Right Bottom Dig : 2
 
+GPIO.setmode(GPIO.BCM)
+
+dig1 = 17  # 17
+dig2 = 13 # DIg : 13 
+
+GPIO.setup(dig1,GPIO.OUT, initial=GPIO.LOW) # Dig : 1
+GPIO.setup(dig2,GPIO.OUT, initial=GPIO.LOW) # Dig : 2
+
+
+#fp = [18,27,22,23,24,25,5,6] # BCM
+zero = [22,27,23,5,6,24]
+one = [23,6]
+two = [22,23,18,5,24,]
+three = [22,23,18,6,24]
+#four = [27,18,23,6]
+#five = [22,27,18,6,24]
+#six = [27,5,24,6,18]
+#seven = [27,22,23,6]
+#eight = [22,23,6,24,5,27,18]
+#nine = [27,22,23,6,18]
+
+# Test 
+nn = 50 %10
+numList = ['zero','one', 'two', 'three', 'four','five','six','seven','eight','nine']
+print("\% : ",nn ,numList[nn])
+
+print("start")
+
+for i, val in enumerate(zero):
+#   GPIO.setup(dig1, GPIO.OUT, initial=GPIO.LOW)  # FND pin 10 ON index:5(BCM-12) - Dig : 2
+    GPIO.setup(dig1, GPIO.OUT, initial=GPIO.HIGH)  # FND pin 10 ON index:5(BCM-12) - Dig : 2
+    GPIO.setup(zero[i], GPIO.OUT, initial=GPIO.LOW)  
+
+time.sleep(2)
+GPIO.cleanup()
+
+
+
+
+
 
 def fndNum(n):
-    dig1 = 17  
-    dig2 = 13
-
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(dig1,GPIO.OUT, initial=GPIO.LOW) # Dig : 1
-    GPIO.setup(dig2,GPIO.OUT, initial=GPIO.LOW) # Dig : 2
-    #   GPIO 4,17,18,27,22,23,24,25,5,6 - BCM
-
-    fp = [18,27,22,23,24,25,5,6] # BCM
-    zero = [22,27,23,5,6,24]
-    one = [23,6]
-    two = [22,23,18,5,24,]
-    three = [22,23,18,6,24]
-    four = [27,18,23,6]
-    five = [22,27,18,6,24]
-    six = [27,5,24,6,18]
-    seven = [27,22,23,6]
-    eight = [22,23,6,24,5,27,18]
-    nine = [27,22,23,6,18]
+#   GPIO 4,17,18,27,22,23,24,25,5,6 - BCM
 
 
     if dig1 > 0: 
@@ -136,9 +156,3 @@ def diplayNum_FND():
 
 #fndDigInit()
 #diplayNum_FND()
-
-# Test 
-nn = 50 %10
-numList = ['zero','one', 'two', 'three', 'four','five','six','seven','eight','nine']
-print("\% : ",nn ,numList[nn])
-
