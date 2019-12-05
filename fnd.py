@@ -43,12 +43,12 @@ def displayFNDNumber(inputNum):
     od = 0
     td = 0
 
-    print("input Num : ", inputNum)
-    print("0 : ",zero, "\n1 : ",one, "\n2 : ",two,
-          "\n3 : " , three, "\n4 : " ,four,
-          "\n5 : " , five,  "\n6 : " ,six, 
-          "\n7 : " , seven, "\n8 : " ,eight, 
-          "\n9 : ",nine)
+   #print("input Num : ", inputNum)
+   #print("0 : ",zero, "\n1 : ",one, "\n2 : ",two,
+   #      "\n3 : " , three, "\n4 : " ,four,
+   #      "\n5 : " , five,  "\n6 : " ,six, 
+   #      "\n7 : " , seven, "\n8 : " ,eight, 
+   #      "\n9 : ",nine)
 
     
     if inputNum >= 10:
@@ -64,7 +64,7 @@ def displayFNDNumber(inputNum):
         odFND(od)
     
 def tdFND(aptd):
-    print("td arr : ",arrList[aptd])
+   #print("td arr : ",arrList[aptd])
 
     for i, val in enumerate(arrList[aptd]):
         GPIO.setup(dig1, GPIO.OUT, initial=GPIO.HIGH)  # Dig 1(ten dig) on
@@ -76,7 +76,7 @@ def tdFND(aptd):
         fndcls(dig1)
 
 def odFND(apod):
-    print("od arr : ",arrList[apod])
+   #print("od arr : ",arrList[apod])
         
     for i, val in enumerate(arrList[apod]):
         GPIO.setup(dig1, GPIO.OUT, initial=GPIO.LOW)  # Dig 1(ten dig) off
@@ -92,7 +92,7 @@ cnt = 90
 while True:
     for i in range(0,100):
         displayFNDNumber(cnt)
-        if cnt is 0:
-            cnt = 100
+        if cnt <= 0:
+            cnt = 90
     cnt -= 1
 
