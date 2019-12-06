@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+import sys
 
 # FND Pin Dig position pin
 # FND Left Top Dig : 1
@@ -8,7 +9,7 @@ import time
 GPIO.setmode(GPIO.BCM)
 
 dig1 = 17  # 17
-dig2 = 13 # DIg : 13 
+dig2 = 13  # DIg : 13 
 
 #GPIO.setup(dig1,GPIO.OUT, initial=GPIO.LOW) # Dig : 1
 #GPIO.setup(dig2,GPIO.OUT, initial=GPIO.LOW) # Dig : 2
@@ -26,9 +27,7 @@ seven = [27,22,23,6]
 eight = [22,23,6,24,5,27,18]
 nine = [27,22,23,6,18]
 
-# Test 
 
-getnum = 5
 #numList = ['zero','one', 'two', 'three', 'four','five','six','seven','eight','nine']
 arrList = [zero, one, two, three, four, five, six, seven, eight, nine]
 
@@ -38,6 +37,37 @@ def fndcls(dig):
     for i, val in enumerate(fp):
         GPIO.setup(fp[i], GPIO.OUT, initial=GPIO.HIGH) # fnd led off
 
+    
+# print Number position - dig 1 - 10 
+def tdFND(aptd):
+   #print("td arr : ",arrList[aptd])
+
+    for i, val in enumerate(arrList[aptd]):
+        GPIO.setup(dig1, GPIO.OUT, initial=GPIO.HIGH)  # Dig 1(ten dig) on
+        GPIO.setup(dig2, GPIO.OUT, initial=GPIO.LOW)  # FND pin 10 ON index:5(BCM-12) - Dig : 2 GPIO.setup(dig1, GPIO.OUT, initial=GPIO.HIGH)  # FND pin 10 ON index:5(BCM-12) - Dig : 2 
+
+
+        GPIO.setup(arrList[aptd], GPIO.OUT, initial=GPIO.LOW)  # FND pin 10 ON index:5(BCM-12) - Dig : 2
+        time.sleep(0.001)
+        fndcls(dig1)
+
+# print Number position - dig 2 - 1
+def odFND(apod):
+   #print("od arr : ",arrList[apod])
+        
+    for i, val in enumerate(arrList[apod]):
+        GPIO.setup(dig1, GPIO.OUT, initial=GPIO.LOW)  # Dig 1(ten dig) off
+        GPIO.setup(dig2, GPIO.OUT, initial=GPIO.HIGH)  # Dig 2(one dig) on
+        
+
+        GPIO.setup(arrList[apod], GPIO.OUT, initial=GPIO.LOW)  # FND pin 10 ON index:5(BCM-12) - Dig : 2
+        time.sleep(0.001)
+        fndcls(dig2)
+
+
+
+
+#number disPlay FND 
 def displayFNDNumber(inputNum):
 
     od = 0
@@ -62,32 +92,12 @@ def displayFNDNumber(inputNum):
         od = inputNum % 10
         tdFND(0)
         odFND(od)
-    
-def tdFND(aptd):
-   #print("td arr : ",arrList[aptd])
 
-    for i, val in enumerate(arrList[aptd]):
-        GPIO.setup(dig1, GPIO.OUT, initial=GPIO.HIGH)  # Dig 1(ten dig) on
-        GPIO.setup(dig2, GPIO.OUT, initial=GPIO.LOW)  # FND pin 10 ON index:5(BCM-12) - Dig : 2 GPIO.setup(dig1, GPIO.OUT, initial=GPIO.HIGH)  # FND pin 10 ON index:5(BCM-12) - Dig : 2 
+# ========================================================
 
 
-        GPIO.setup(arrList[aptd], GPIO.OUT, initial=GPIO.LOW)  # FND pin 10 ON index:5(BCM-12) - Dig : 2
-        time.sleep(0.001)
-        fndcls(dig1)
-
-def odFND(apod):
-   #print("od arr : ",arrList[apod])
-        
-    for i, val in enumerate(arrList[apod]):
-        GPIO.setup(dig1, GPIO.OUT, initial=GPIO.LOW)  # Dig 1(ten dig) off
-        GPIO.setup(dig2, GPIO.OUT, initial=GPIO.HIGH)  # Dig 2(one dig) on
-        
-
-        GPIO.setup(arrList[apod], GPIO.OUT, initial=GPIO.LOW)  # FND pin 10 ON index:5(BCM-12) - Dig : 2
-        time.sleep(0.001)
-        fndcls(dig2)
-
-
+# test ccode
+'''
 cnt = 90
 while True:
     for i in range(0,100):
@@ -95,4 +105,4 @@ while True:
         if cnt <= 0:
             cnt = 90
     cnt -= 1
-
+'''
