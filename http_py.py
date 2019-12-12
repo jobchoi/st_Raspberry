@@ -31,8 +31,8 @@ def webcontents_send():
 # Send Data to Server
 # ==========================================
     datas = {
-                "devName":"led", 
-                "devState":"OK"
+                "devName":"led1", 
+                "devState":""
             }
     response = requests.post(url,data=datas )
 # ==========================================
@@ -47,14 +47,11 @@ def webcontents_send():
 
 def getDataToServer():
     url = "http://192.168.0.20:8081/skyobserver/pitodata"   # Local Server
-    getData = request.get(url, params = {}).json()
+    getData = requests.get(url, params = {}).json()
     print(getData)
 
     for dat in getData:
         print(dat.get('devName'), dat.get('devState'))
-    
-
-
 
 webcontents_send()
 print(" webcontents end")
