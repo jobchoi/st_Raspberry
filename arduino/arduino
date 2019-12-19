@@ -1,0 +1,48 @@
+[?2004h[?1049h[22;0;0t[?1h=[?2004h[1;58r[?12h[?12l[22;2t[22;1t[27m[23m[29m[m[37m[1m[H[2J[?25l[58;1H"dust.c" 45L, 1138C[1;1H[m[37m  1 [m[37m[1m[m[33mint[m[37m[1m measurePin = A0; [m[37m//Connect dust sensor to Arduino A0 pin[m[37m[1m
+[m[37m  2 [m[37m[1m[m[33mint[m[37m[1m ledPower = [m[31m2[m[37m[1m;   [m[37m//Connect 3 led driver pins of dust sensor to Arduino D2[m[37m[1m
+[m[37m  3 
+  4 [m[37m[1m[m[33mint[m[37m[1m samplingTime = [m[31m280[m[37m[1m;
+[m[37m  5 [m[37m[1m[m[33mint[m[37m[1m deltaTime = [m[31m40[m[37m[1m;
+[m[37m  6 [m[37m[1m[m[33mint[m[37m[1m sleepTime = [m[31m9680[m[37m[1m;
+[m[37m  7 
+  8 [m[37m[1m[m[33mfloat[m[37m[1m voMeasured = [m[31m0.0[m[37m[1m;
+[m[37m  9 [m[37m[1m[m[33mfloat[m[37m[1m calcVoltage = [m[31m0.0[m[37m[1m;
+[m[37m 10 [m[37m[1m[m[33mfloat[m[37m[1m dustDensity = [m[31m0.0[m[37m[1m;
+[m[37m 11 
+ 12 [m[37m[1m[m[33mvoid[m[37m[1m setup(){
+[m[37m 13 [m[37m[1m  Serial.begin([m[31m9600[m[37m[1m);
+[m[37m 14 [m[37m[1m  pinMode(ledPower,OUTPUT);
+[m[37m 15 [m[37m[1m}
+[m[37m 16 
+ 17 [m[37m[1m[m[33mvoid[m[37m[1m loop()[1m[35m{[m[37m[1m
+[m[37m 18 [m[37m[1m  digitalWrite(ledPower,LOW); [m[37m// power on the LED[m[37m[1m
+[m[37m 19 [m[37m[1m  delayMicroseconds(samplingTime);
+[m[37m 20 
+ 21 [m[37m[1m  voMeasured = analogRead(measurePin); [m[37m// read the dust value[m[37m[1m
+[m[37m 22 
+ 23 [m[37m[1m  delayMicroseconds(deltaTime);
+[m[37m 24 [m[37m[1m  digitalWrite(ledPower,HIGH); [m[37m// turn the LED off[m[37m[1m
+[m[37m 25 [m[37m[1m  delayMicroseconds(sleepTime);
+[m[37m 26 
+ 27 [m[37m[1m  [m[37m// 0 - 5V mapped to 0 - 1023 integer values[m[37m[1m
+[m[37m 28 [m[37m[1m  [m[37m// recover voltage[m[37m[1m
+[m[37m 29 [m[37m[1m  calcVoltage = voMeasured * ([m[31m5.0[m[37m[1m / [m[31m1024.0[m[37m[1m);
+[m[37m 30 
+ 31 [m[37m[1m  [m[37m// linear eqaution taken from http://www.howmuchsnow.com/arduino/airquality/[m[37m[1m
+[m[37m 32 [m[37m[1m  [m[37m// Chris Nafis (c) 2012[m[37m[1m
+[m[37m 33 [m[37m[1m  dustDensity = [m[31m0.17[m[37m[1m * calcVoltage - [m[31m0.1[m[37m[1m;
+[m[37m 34 
+ 35 [m[37m[1m  Serial.print([m[32m"Raw Signal Value (0-1023): "[m[37m[1m);
+[m[37m 36 [m[37m[1m  Serial.print(voMeasured);
+[m[37m 37 
+ 38 [m[37m[1m  Serial.print([m[32m" - Voltage: "[m[37m[1m);
+[m[37m 39 [m[37m[1m  Serial.print(calcVoltage);
+[m[37m 40 
+ 41 [m[37m[1m  Serial.print([m[32m" - Dust Density: "[m[37m[1m);
+[m[37m 42 [m[37m[1m  Serial.println(dustDensity); [m[37m// unit: mg/m3[m[37m[1m
+[m[37m 43 
+ 44 [m[37m[1m  delay([m[31m1000[m[37m[1m);
+[m[37m 45 [m[37m[1m[1m[35m}[m[37m[1m
+[m[37m~                                                                                                                                                                 [47;1H~                                                                                                                                                                 [48;1H~                                                                                                                                                                 [49;1H~                                                                                                                                                                 [50;1H~                                                                                                                                                                 [51;1H~                                                                                                                                                                 [52;1H~                                                                                                                                                                 [53;1H~                                                                                                                                                                 [54;1H~                                                                                                                                                                 [55;1H~                                                                                                                                                                 [56;1H~                                                                                                                                                                 [m[37m[1m[57;1H[47m 45:1 [All]                                                                                                                   ~/team1/st_Raspberry/arduino/dust.c\[45;5H[?25h[?25l[m[37m[1m[58;1HType  :qa!  and press <Enter> to abandon all changes and exit Vim[45;5H[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[58;1H[41mE349: No identifier under cursor[m[37m[1m[58;34H[K[45;5H[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?2004h[?25h[58;1H[39;49m[m[?2004l[?1l>[?1049l[23;0;0tVim: Caught deadly signal TERM
+Vim: Finished.
+[58;1H[23;2t[23;1t[22;2t[22;1t[23;2t[23;1t[27m[23m[29m[m[37m[1m[39;49m[m
