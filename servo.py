@@ -39,7 +39,7 @@ while(1):
     val = float(raw_input("input(3 ~ 7.5 ~ 12)="))
     if val == -1: break;
 
-    p.ChangeDutyCycle(val)
+    p.ChangeDutyCycle(vaer)
 
 
 p.stop()                

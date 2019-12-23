@@ -6,7 +6,7 @@ import sys
 # FND Left Top Dig : 1
 # FND Right Bottom Dig : 2
 
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BOARD)
 
 dig1 = 17  # 17
 dig2 = 13  # DIg : 13 

@@ -1,6 +1,6 @@
 CC = gcc
 CFAGS = -W -Wall
-TARGET = server
+TARGET = rasp
 OBJECTS = server.o
 
 all : $(TARGET)
@@ -12,4 +12,4 @@ server.o: socketServer.c
 	$(CC) $(CFLAGS)	-c -o server.o socketServer.c
 
 clean :
-	rm *.o server
+	rm *.o rasp

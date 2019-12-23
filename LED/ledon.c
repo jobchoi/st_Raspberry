@@ -295,9 +295,9 @@ void run_func()
   f.to[0] = 16;
   f.wait[0] = 500;
   f.run_time[0] = 0;
-  f.r[0]=1;
-  f.g[0]=1;
-  f.b[0]=1;
+  f.r[0]=255;
+  f.g[0]=255;
+  f.b[0]=255;
   
 
   for(j = 0; j<f.num; j++)
