@@ -31,24 +31,24 @@ while True:
 	doorstate2 = GPIO.input(doorpin2)
 
 	if doorstate1 is 1:
-		print("door 1 : lock")
+	
+#print("door 1 : lock")
 		p1.ChangeDutyCycle(lock)
 
 	if doorstate2 is 1:
-		print("door 2 : lock")
+#		print("door 2 : lock")
 		p2.ChangeDutyCycle(lock)
 
 	if doorstate1 is 0:  
-		print("door 1 : unlock")
+#	print("door 1 : unlock")
 		p1.ChangeDutyCycle(unlock)
 
 	if doorstate2 is 0:  
-		print("door 2 : unlock")
+#	print("door 2 : unlock")
 		p2.ChangeDutyCycle(unlock)
 
 	time.sleep(0.1)
 
-	print("=====1 =================")
 
 p.stop()                
 GPIO.cleanup() 

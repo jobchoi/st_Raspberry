@@ -1,2 +1,0 @@
-dev_led1=0
-dev_led2=1

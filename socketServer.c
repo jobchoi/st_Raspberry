@@ -12,22 +12,35 @@
 //... .... ... .. ... ..
 
 char* door1_Func(FILE* fp, int i, int bufferSize);
-void run(char* pdevName, char* pfileRead, char* getMsgClient);
+void run(char* getMsgClient);
  
 int server_fd, client_fd;
+
+
+int door1 = 0;
+int door2 = 0;
+int led = 0;
 
 int main(int argc, char *argv[])
 {
 	pid_t pid = 0;
+	FILE* fpdoor1 = NULL;
+	FILE* fpdoor2 = NULL;
+	FILE* fpled = NULL;
 
 	pid = fork();
 	if(pid > 0){
 		char buffer[BUF_LEN];
+		char buffer1[BUF_LEN];
 		struct sockaddr_in server_addr, client_addr;
 		char temp[20];
-		//server_fd, client_fd : . .. ..
-		int len, msg_size, i = 0;
+		char door1Buffer[20] = {'\0',};
+		char door2Buffer[20] = {'\0',};
+		char ledBuffer[20] = {'\0',};
+
+		int len=0, msg_size=0;
 		char fileRead[20] = {0,};
+		int po = 0, i = 0, linePo = 0;
 
 		if(argc != 2)
 		{
@@ -64,6 +77,41 @@ int main(int argc, char *argv[])
 		printf("Server : wating connection request.\n");
 		len = sizeof(client_addr);
 
+		puts("server start");
+
+		fpdoor1 = fopen("door1state.txt","r+");
+		fpdoor2 = fopen("door2state.txt","r+");
+		fpled = fopen("ledstate.txt","r+");
+
+		if(fpdoor1 == NULL){
+			printf("FILE door1 OPEN ERROR!");
+			return "open error";
+		}
+		if(fpdoor2 == NULL){
+			printf("FILE door2 OPEN ERROR!");
+			return "open error";
+		}
+		if(fpled == NULL){
+			printf("FILE led OPEN ERROR!");
+			return "open error";
+		}
+
+		fseek(fpdoor1, 0, SEEK_SET); // 파일 포인터 위치를 이동
+		fseek(fpdoor2, 0, SEEK_SET); // 파일 포인터 위치를 이동
+		fseek(fpled, 0, SEEK_SET); // 파일 포인터 위치를 이동
+
+		fgets(door1Buffer, sizeof(door1Buffer), fpdoor1);
+		fgets(door2Buffer, sizeof(door2Buffer), fpdoor2);
+		fgets(ledBuffer, sizeof(ledBuffer), fpled);
+
+		door1 = door1Buffer[6];
+		door2 = door2Buffer[6];
+		led = ledBuffer[6];
+
+		printf("버퍼 확인 1: %s\n값확인 : %c\n", door1Buffer, door1);
+		printf("버퍼 확인 2: %s\n값확인 : %c\n", door2Buffer, door2);
+		printf("버퍼 확인 3: %s\n값확인 : %c\n", ledBuffer, led);
+
 		while(1)
 		{
 			client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &len);
@@ -73,16 +121,16 @@ int main(int argc, char *argv[])
 				exit(0);
 			}
 			inet_ntop(AF_INET, &client_addr.sin_addr.s_addr, temp, sizeof(temp));
+
 			printf("Server : %s client connected.\n", temp);
 		
 			msg_size = read(client_fd, buffer, 1024);
 			write(client_fd, buffer, msg_size);
-
 			printf("read buffer : %s\n" ,buffer);
-			run(buffer, fileRead, buffer);
+			run(buffer);
 
-			memset(buffer, 0, sizeof(buffer));
 			printf("Server : %s client closed.\n", temp);
+			memset(buffer, 0, sizeof(buffer));
 		}
 		close(server_fd);
 	} else {
@@ -94,88 +142,17 @@ int main(int argc, char *argv[])
 } 
 
 
-void run(char* pdevName, char* pfileRead, char* getMsgClient){
-
-	FILE* fp = NULL;
-	int po = 0, i = 0, linePo = 0;
-	char test1[20] = {'\0',};
-	char test2[20] = {'\0',};
-	char test3[20] = {'\0',};
-
+void run(char* getMsgClient){
 	puts("==================== start run ===================");
-	printf("devName: %s\n", pdevName);
+	printf("getMsgClient : %s\n", getMsgClient);
 
-	if(!strcmp(pdevName, "door1")){
-		printf("devName - run : %s\n", pdevName);
-
-		fp = fopen("devState.txt","rw");
-		if(!fp){
-			perror("file open error");
-			fclose(fp);
-		}
-
-		fseek(fp, 0, SEEK_SET); // 파일 포인터 위치를 이동
-		po = ftell(fp); 
-		fgets(test1,sizeof(test1), fp);
-
-		if(test1[10] == '0'){
-			char val = '1';
-			fwrite(&val,sizeof(val) ,1 ,fp);
-		} else {
-			printf("e - result : %d\n", test1[9]);
-		}
-		printf("test1 : %s file pointer : %d  ", test1, po);
-		printf("getMsgClient : %s\n", getMsgClient);
-
-		close(client_fd);
-	} else if(strcmp(pdevName, "door2") == 0){
-		system("LED/off");
-
-		fp = fopen("devState.txt","rw");
-		if(!fp){
-			perror("file open error");
-			fclose(fp);
-		}
-
-		printf("door2 buffer : %s\n", pdevName);
-		fseek(fp, 9, SEEK_SET);
-		po = ftell(fp);
-		fgets(test2,sizeof(test2), fp);
-
-		if(test2[9] == '1'){
-			printf("i - result : %c\n", test2[9]);
-		} else if(test2[9] == '0'){
-			printf("ei - result숫자 : %d\n", test2[9]);
-		} else {
-			printf("e - result : %c\n", test2[9]);
-		}
-		printf("test2 : %s file pointer : %d  ", test2, po);
-		printf("getMsgClient : %s\n", getMsgClient);
-
-		close(client_fd);
-	} else if(!strcmp(pdevName, "requestHome")){
-		fp = fopen("devState.txt","r");
-		if(!fp){
-			perror("file open error");
-			fclose(fp);
-		}
-		printf("request buffer : %s  ", pdevName);
-		printf("getMsgClient : %s\n", getMsgClient);
-
-		fseek(fp, 21, SEEK_SET);
-		po = ftell(fp);
-		fgets(test3,sizeof(test3), fp);
-		printf("test3 : %s file pointer : %d\n", test3, po);
-		close(client_fd);
+	if(strcmp(getMsgClient, "request_and_door1")){
+		printf("if - %s\n",getMsgClient);
+	} else {
+		printf("else - %s\n",getMsgClient);
 	}
-	puts(" =========================== ");
 
-    memset(test1, '\0', sizeof(test1));
-    memset(test2, '\0', sizeof(test2));
-    memset(test3, '\0', sizeof(test3));
-}
-
-void rileRW(FILE* fp){
+	close(client_fd);
 }
 
 
@@ -188,7 +165,6 @@ char* door1_Func(FILE* fp, int i, int bufferSize){
 	}
 
 	system("LED/on");
-	fp = fopen("devState.txt","r");
 
 	//printf("buffer state:%s",buffer);
 //	close(client_fd);
