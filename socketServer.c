@@ -21,6 +21,9 @@ int door1 = 0;
 int door2 = 0;
 int led = 0;
 
+bool jobFlag = true;
+bool jobrock = true;
+
 int main(int argc, char *argv[])
 {
 	pid_t pid = 0;
@@ -136,6 +139,11 @@ int main(int argc, char *argv[])
 	} else {
 		puts("fork sucess");
 		system("python3 door.py");
+
+		if(jobFlag){
+
+		}
+			
 	}
 
     return 0;
